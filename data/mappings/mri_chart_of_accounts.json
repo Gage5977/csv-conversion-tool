@@ -1,0 +1,226 @@
+{
+  "chart_info": {
+    "name": "GM COA (GM)",
+    "description": "MRI Chart of Accounts",
+    "last_updated": "2025-06-14"
+  },
+  "accounts": {
+    "GM10100": {
+      "description": "Cash - Checking",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM14000": {
+      "description": "Prepaid Property Tax",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM37102": {
+      "description": "Cap Exp - Ranges/Stoves",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM37105": {
+      "description": "Cap Exp - Washer",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM37106": {
+      "description": "Cap Exp - Dryer",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM38000": {
+      "description": "Cap Exp - Other",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM61000": {
+      "description": "Accounts Payable",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM63000": {
+      "description": "Prepaid Rent from Tenants",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM68000": {
+      "description": "Security Dep - Collected",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM68099": {
+      "description": "Security Dep - Refunded",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM76000": {
+      "description": "Capital Contribution",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM76105": {
+      "description": "Distribution to Owner(s)",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM79000": {
+      "description": "Owner's Equity <Deficit>",
+      "type": "Balance Sheet",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM81000": {
+      "description": "Scheduled Rent",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM81500": {
+      "description": "Other Adj - Prepaid Current",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83040": {
+      "description": "Res Mgmt Cost - Outside Sec",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83100": {
+      "description": "Supplies & Misc - Forms/Checks",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83105": {
+      "description": "Supplies & Misc - Other",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83290": {
+      "description": "Rep & Maint - Salary/Hourly",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83292": {
+      "description": "Rep & Maint - Payroll Taxes",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83296": {
+      "description": "Rep & Maint - 401k Cont",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83307": {
+      "description": "Clean & Paint - Other",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83700": {
+      "description": "Professional Mgmt. Fee",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83802": {
+      "description": "Legal & Acctg - Other Legal",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83900": {
+      "description": "Utilities - Electricity",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83920": {
+      "description": "Utilities - Refuse",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83930": {
+      "description": "Utilities - Water",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM83931": {
+      "description": "Utilities - Sewer/Sanitation",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM85100": {
+      "description": "Property Taxes",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM86006": {
+      "description": "Ground Lease",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    },
+    "GM88100": {
+      "description": "CAM Reconciliation",
+      "type": "P&L",
+      "1099_account": "N",
+      "active": "Y",
+      "dp_restriction": null
+    }
+  }
+}

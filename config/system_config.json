@@ -1,0 +1,51 @@
+{
+  "system_info": {
+    "name": "MRI Trial Balance Import System",
+    "version": "1.0.0",
+    "description": "Replicates Excel Trial Balance Conversion Tool functionality"
+  },
+  "entity_config": {
+    "default_entity_id": "M55020",
+    "entity_name": "627 W Main St. - Merced, CA",
+    "default_department": "@",
+    "company_code": "MGMT"
+  },
+  "processing_rules": {
+    "materiality_threshold": 0.01,
+    "zero_activity_exclude": true,
+    "period_format": "MM/YY",
+    "rounding_precision": 2,
+    "balance_tolerance": 0.005
+  },
+  "mri_defaults": {
+    "source": "GA",
+    "status": "P",
+    "basis": "B",
+    "department": "@",
+    "ref": null,
+    "auditflag": null,
+    "addldesc": null,
+    "assetclass": null,
+    "assetcode": null,
+    "interentity": null
+  },
+  "validation_rules": {
+    "require_account_mapping": true,
+    "validate_balance_reconciliation": true,
+    "check_materiality_threshold": true,
+    "verify_target_chart_compliance": true,
+    "generate_variance_report": true
+  },
+  "file_settings": {
+    "max_file_size_mb": 50,
+    "allowed_extensions": [".csv", ".xlsx"],
+    "temp_file_retention_hours": 1,
+    "export_date_format": "%Y-%m-%d"
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_rotation": true,
+    "max_log_files": 10
+  }
+}

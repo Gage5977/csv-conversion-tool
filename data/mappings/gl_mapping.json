@@ -1,0 +1,137 @@
+{
+  "mapping_info": {
+    "description": "GL Account Mapping: Bitwise → MRI",
+    "last_updated": "2025-06-14",
+    "version": "1.0.0"
+  },
+  "account_mappings": {
+    "10100-0-000": {
+      "target_account": "GM10100",
+      "description": "Cash - Checking",
+      "account_type": "Asset"
+    },
+    "68000-0-000": {
+      "target_account": "GM79000",
+      "description": "Security Dep - Collected → Owner's Equity <Deficit>",
+      "account_type": "Liability"
+    },
+    "81000": {
+      "target_account": "GM81000",
+      "description": "Scheduled Rent",
+      "account_type": "Revenue"
+    },
+    "83100-0-000": {
+      "target_account": "GM83100",
+      "description": "Supplies & Misc - Forms/Checks",
+      "account_type": "Expense"
+    },
+    "83105-0-000": {
+      "target_account": "GM83105",
+      "description": "Supplies & Misc - Other",
+      "account_type": "Expense"
+    },
+    "83700-0-000": {
+      "target_account": "GM83700",
+      "description": "Professional Mgmt. Fee",
+      "account_type": "Expense"
+    },
+    "86007-0-000": {
+      "target_account": "GM88100",
+      "description": "CAM Reconciliation",
+      "account_type": "Expense"
+    },
+    "81500-0-000": {
+      "target_account": "GM81500",
+      "description": "Other Adj - Prepaid Current",
+      "account_type": "Revenue"
+    },
+    "83040-0-000": {
+      "target_account": "GM83040",
+      "description": "Res Mgmt Cost - Outside Sec",
+      "account_type": "Expense"
+    },
+    "83802-0-000": {
+      "target_account": "GM83802",
+      "description": "Legal & Acctg - Other Legal",
+      "account_type": "Expense"
+    },
+    "83900-0-000": {
+      "target_account": "GM83900",
+      "description": "Utilities - Electricity",
+      "account_type": "Expense"
+    },
+    "76000-0-000": {
+      "target_account": "GM76000",
+      "description": "Capital Contribution",
+      "account_type": "Equity"
+    },
+    "83307-0-000": {
+      "target_account": "GM83307",
+      "description": "Clean & Paint - Other",
+      "account_type": "Expense"
+    },
+    "83290-0-000": {
+      "target_account": "GM83290",
+      "description": "Rep & Maint - Salary/Hourly",
+      "account_type": "Expense"
+    },
+    "83292-0-000": {
+      "target_account": "GM83292",
+      "description": "Rep & Maint - Payroll Taxes",
+      "account_type": "Expense"
+    },
+    "83296-0-000": {
+      "target_account": "GM83296",
+      "description": "Rep & Maint - 401k Cont",
+      "account_type": "Expense"
+    },
+    "83920-0-000": {
+      "target_account": "GM83920",
+      "description": "Utilities - Refuse",
+      "account_type": "Expense"
+    },
+    "83930-0-000": {
+      "target_account": "GM83930",
+      "description": "Utilities - Water",
+      "account_type": "Expense"
+    },
+    "83931-0-000": {
+      "target_account": "GM83931",
+      "description": "Utilities - Sewer/Sanitation",
+      "account_type": "Expense"
+    },
+    "86006-0-000": {
+      "target_account": "GM86006",
+      "description": "Ground Lease",
+      "account_type": "Expense"
+    },
+    "76105": {
+      "target_account": "GM76105",
+      "description": "Distribution to Owner(s)",
+      "account_type": "Equity"
+    },
+    "85100-0-000": {
+      "target_account": "GM85100",
+      "description": "Property Taxes",
+      "account_type": "Expense"
+    }
+  },
+  "mapping_patterns": {
+    "calculated_retained_earnings": {
+      "source_pattern": ".*Prior Years Retained Earnings.*",
+      "target_account": "GM79000",
+      "description": "Owner's Equity <Deficit>",
+      "account_type": "Equity"
+    }
+  },
+  "transformation_rules": {
+    "remove_patterns": ["-0-000", ": .*"],
+    "prefix_rules": {
+      "default_prefix": "GM"
+    },
+    "consolidation_rules": {
+      "68000-0-000": "GM79000",
+      "Calculated Prior Years Retained Earnings": "GM79000"
+    }
+  }
+}

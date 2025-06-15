@@ -1,0 +1,14 @@
+Account,Description,Debit,Credit,Net
+10100-0-000: Cash - Checking,Cash - Checking,20404.86,0,20404.86
+76105: Distribution to Owner(s),Distribution to Owner(s),48000,0,48000
+81000: Scheduled Rent,Scheduled Rent,0,0,0
+83105-0-000: Supplies & Misc - Other,Supplies & Misc - Other,0,0,0
+83290-0-000: Rep & Maint - Salary/Hourly,Rep & Maint - Salary/Hourly,0,0,0
+83292-0-000: Rep & Maint - Payroll Taxes,Rep & Maint - Payroll Taxes,0,0,0
+83296-0-000: Rep & Maint - 401k Cont,Rep & Maint - 401k Cont,0,0,0
+83700-0-000: Professional Mgmt. Fee,Professional Mgmt. Fee,0,0,0
+83920-0-000: Utilities - Refuse,Utilities - Refuse,0,0,0
+83930-0-000: Utilities - Water,Utilities - Water,0,0,0
+83931-0-000: Utilities - Sewer/Sanitation,Utilities - Sewer/Sanitation,0,0,0
+86006-0-000: Ground Lease,Ground Lease,0,0,0
+Calculated Prior Years Retained Earnings,Owner's Equity <Deficit>,0,68404.86,-68404.86
