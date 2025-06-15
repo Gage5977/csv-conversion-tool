@@ -1,0 +1,15 @@
+Account,Description,Debit,Credit
+1000,Cash,65000.00,0.00
+1100,Accounts Receivable,85000.00,0.00
+1200,Inventory,115000.00,0.00
+1500,Fixed Assets,250000.00,0.00
+1600,Accumulated Depreciation,0.00,100000.00
+2000,Accounts Payable,0.00,75000.00
+2100,Accrued Expenses,0.00,30000.00
+2500,Long Term Debt,0.00,140000.00
+3000,Common Stock,0.00,100000.00
+3100,Retained Earnings,0.00,70000.00
+4000,Revenue,0.00,400000.00
+5000,Cost of Goods Sold,300000.00,0.00
+6000,Operating Expenses,135000.00,0.00
+6500,Depreciation Expense,25000.00,0.00 

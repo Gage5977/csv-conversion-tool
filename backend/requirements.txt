@@ -1,0 +1,7 @@
+Flask
+flask_cors
+werkzeug
+pandas
+numpy
+pywebview
+pyinstaller 

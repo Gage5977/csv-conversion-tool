@@ -1,0 +1,35 @@
+Account_Code,Account_Name,Debit,Credit
+1000-0000,Cash,125000,0
+1000-0010,Cash - Entity Arvest,75000,0
+1000-0020,Cash - Entity Northern Trust,50000,0
+1201-0000,Accounts Receivable,85000,0
+1201-9999,Allowance for Bad Debt,0,5000
+1310-0000,Prepaid Expenses,15000,0
+1350-0000,Inventory,25000,0
+1400-0010,Land,500000,0
+1501-0010,Building,2000000,0
+1501-9999,Accum Depr - Building,0,400000
+1503-0010,Furniture Fixtures Equipment,350000,0
+1503-9999,Accum Depr - FF&E,0,150000
+2010-0000,Accounts Payable,0,45000
+2100-0000,Tenant Security Deposit,0,35000
+2200-0000,Unearned Revenue,0,20000
+2400-0000,Accrued Liabilities,0,30000
+2510-0000,Notes Payable,0,800000
+3000-0010,Equity Contributions,0,1500000
+3000-0030,Net Income,0,240000
+4100-5000,Room Revenue,0,850000
+4110-5000,Food Revenue,0,275000
+4110-5100,Beverage Revenue,0,125000
+4200-8000,Rental Revenue,0,450000
+6000-5000,Cost of Sales,185000,0
+6020-0000,General & Administration,95000,0
+6030-0000,Repairs & Maintenance,55000,0
+6100-0000,Payroll,385000,0
+6300-0000,Utilities,65000,0
+6310-0000,Travel,25000,0
+7100-0001,Insurance,45000,0
+7200-0000,Property Taxes,85000,0
+7400-0000,Interest Expense,35000,0
+7700-0000,Depreciation & Amortization,75000,0
+TOTALS,TOTAL,4255000,4255000
