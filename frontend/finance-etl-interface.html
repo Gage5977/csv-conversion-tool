@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Finance ETL Interface - Trial Balance to Journal Entry Automation">
+    <title>Finance ETL Interface - Trial Balance Processor</title>
+    <style>
+        :root {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2d2d2d;
+            --text-color: #e0e0e0;
+            --accent-color: #4CAF50;
+            --error-color: #f44336;
+            --success-color: #4CAF50;
+            --border-color: #555;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: #1a1a1a;
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #00ff88, #00aaff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: #2a2a2a;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+        }
+        
+        .main-container {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .right-panel {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #00ff88;
+        }
+        
+        .upload-section {
+            background-color: var(--secondary-bg);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .upload-box {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-box:hover {
+            border-color: var(--accent-color);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .upload-box.dragover {
+            border-color: var(--accent-color);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .preview-section {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .preview-box {
+            background-color: var(--secondary-bg);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .preview-box h3 {
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+
+        .comparison-section {
+            margin-top: 20px;
+            background-color: var(--secondary-bg);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 8px;
+            text-align: right;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background-color: var(--primary-bg);
+            text-align: left;
+        }
+
+        .comparison-table td.positive {
+            color: var(--success-color);
+        }
+
+        .comparison-table td.negative {
+            color: var(--error-color);
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #00ff88 0%, #00aaff 100%);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+        
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .button.secondary {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+        
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .step.active {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+        }
+        
+        .step.completed {
+            opacity: 0.7;
+        }
+        
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .step.active .step-icon {
+            background: linear-gradient(135deg, #00ff88 0%, #00aaff 100%);
+            color: #000;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .step-description {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .data-preview {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+        
+        .account-mapping {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .mapping-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            background: #2a2a2a;
+            border-radius: 6px;
+        }
+        
+        .mapping-item input {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            color: #e0e0e0;
+            padding: 6px 10px;
+            border-radius: 4px;
+            flex: 1;
+        }
+        
+        .validation-results {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .validation-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #2a2a2a;
+            border-radius: 6px;
+        }
+        
+        .validation-item.success {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+        }
+        
+        .validation-item.error {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+        }
+        
+        .download-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .download-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #2a2a2a;
+            border-radius: 6px;
+        }
+        
+        .ai-chat {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ai-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        
+        .ai-message {
+            margin: 10px 0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .ai-message.user {
+            background: #2a2a2a;
+            margin-left: 20px;
+        }
+        
+        .ai-message.assistant {
+            background: rgba(0, 255, 136, 0.1);
+            margin-right: 20px;
+        }
+        
+        .ai-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .ai-input input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            color: #e0e0e0;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #2a2a2a;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88 0%, #00aaff 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .success-message {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .right-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💰 Finance ETL Interface</h1>
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span>System Ready</span>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="card">
+                <h2>Upload Trial Balance</h2>
+                <div class="upload-section">
+                    <div class="upload-box" id="priorUpload">
+                        <h3>Prior Period TB</h3>
+                        <p>Drop your prior period CSV file here</p>
+                        <p>or</p>
+                        <button class="button" onclick="document.getElementById('priorFileInput').click()">
+                            Choose Prior TB
+                        </button>
+                        <input type="file" id="priorFileInput" accept=".csv" style="display: none;">
+                    </div>
+
+                    <div class="upload-box" id="currentUpload">
+                        <h3>Current Period TB</h3>
+                        <p>Drop your current period CSV file here</p>
+                        <p>or</p>
+                        <button class="button" onclick="document.getElementById('currentFileInput').click()">
+                            Choose Current TB
+                        </button>
+                        <input type="file" id="currentFileInput" accept=".csv" style="display: none;">
+                    </div>
+                </div>
+                
+                <div id="processButtonSection" style="margin-top: 20px;">
+                    <button class="button" id="processButton" onclick="processFiles()">
+                        🚀 Process Trial Balances
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>⚙️ Processing Steps</h2>
+                <div class="process-steps">
+                    <div class="step" id="step1">
+                        <div class="step-icon">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Upload Data</div>
+                            <div class="step-description">Upload trial balance CSV file</div>
+                        </div>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="step-icon">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Validate Data</div>
+                            <div class="step-description">Verify CSV format and data</div>
+                        </div>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="step-icon">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Process Data</div>
+                            <div class="step-description">Generate journal entries</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📊 Data Preview</h2>
+                <div id="dataPreview" class="data-preview">
+                    <p style="color: #666;">No data loaded yet...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="card">
+                <h2>🤖 AI Assistant</h2>
+                <div class="ai-chat">
+                    <div id="aiMessages" class="ai-messages">
+                        <div class="ai-message assistant">
+                            Hello! I'm here to help with your trial balance processing. Upload your configuration to get started.
+                        </div>
+                    </div>
+                    <div class="ai-input">
+                        <input type="text" id="aiInput" placeholder="Ask about mappings, validations...">
+                        <button class="button" style="width: auto;" onclick="sendAIMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>✅ Validation Results</h2>
+                <div id="validationResults" class="validation-results">
+                    <p style="color: #666; text-align: center;">No validation results yet...</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>💾 Download Files</h2>
+                <div id="downloadSection" class="download-section">
+                    <p style="color: #666; text-align: center;">Process data to generate files...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        let priorFile = null;
+        let currentFile = null;
+        let priorData = null;
+        let currentData = null;
+        let isProcessing = false;
+        
+        function showError(message) {
+            const preview = document.getElementById('dataPreview');
+            preview.innerHTML = `<div class="error-message">${message}</div>`;
+        }
+        
+        function showSuccess(message) {
+            const preview = document.getElementById('dataPreview');
+            preview.innerHTML = `<div class="success-message">${message}</div>`;
+        }
+        
+        function updateProcessButton() {
+            const processButtonSection = document.getElementById('processButtonSection');
+            const processButton = document.getElementById('processButton');
+            
+            if (priorFile && currentFile && !isProcessing) {
+                processButtonSection.style.display = 'block';
+                processButton.disabled = false;
+                processButton.textContent = '🚀 Process Trial Balances';
+            } else if (isProcessing) {
+                processButton.disabled = true;
+                processButton.textContent = '⏳ Processing...';
+            } else {
+                processButtonSection.style.display = 'none';
+            }
+        }
+        
+        async function validateFile(file) {
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch(`${API_BASE_URL}/validate`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error validating file');
+                }
+                
+                return true;
+            } catch (error) {
+                showError(`Validation error: ${error.message}`);
+                return false;
+            }
+        }
+        
+        async function readCSV(file, previewElement) {
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                try {
+                    const csvData = e.target.result;
+                    const lines = csvData.split('\n');
+                    const headers = lines[0].split(',');
+                    
+                    // Create preview table
+                    const table = document.createElement('table');
+                    table.className = 'comparison-table';
+                    
+                    // Add headers
+                    const headerRow = table.insertRow();
+                    headers.forEach(header => {
+                        const th = document.createElement('th');
+                        th.textContent = header.trim();
+                        headerRow.appendChild(th);
+                    });
+                    
+                    // Add first 5 rows of data
+                    for (let i = 1; i < Math.min(lines.length, 6); i++) {
+                        const cells = lines[i].split(',');
+                        const row = table.insertRow();
+                        cells.forEach(cell => {
+                            const td = row.insertCell();
+                            td.textContent = cell.trim();
+                        });
+                    }
+                    
+                    previewElement.innerHTML = '';
+                    previewElement.appendChild(table);
+                    
+                } catch (error) {
+                    showError('Error reading CSV: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        // File upload handling for prior period
+        const priorFileInput = document.getElementById('priorFileInput');
+        priorFileInput.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                if (await validateFile(file)) {
+                    priorFile = file;
+                    readCSV(file, document.getElementById('dataPreview'));
+                    document.getElementById('step1').classList.add('completed');
+                    updateProcessButton();
+                }
+            } else {
+                showError('Please upload a CSV file');
+            }
+        });
+        
+        // File upload handling for current period
+        const currentFileInput = document.getElementById('currentFileInput');
+        currentFileInput.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                if (await validateFile(file)) {
+                    currentFile = file;
+                    readCSV(file, document.getElementById('dataPreview'));
+                    document.getElementById('step1').classList.add('completed');
+                    updateProcessButton();
+                }
+            } else {
+                showError('Please upload a CSV file');
+            }
+        });
+        
+        // Drag and drop handling for prior period
+        const priorUpload = document.getElementById('priorUpload');
+        
+        priorUpload.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        
+        priorUpload.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+        
+        priorUpload.addEventListener('drop', async function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                if (await validateFile(file)) {
+                    priorFile = file;
+                    readCSV(file, document.getElementById('dataPreview'));
+                    document.getElementById('step1').classList.add('completed');
+                }
+            } else {
+                showError('Please upload a CSV file');
+            }
+        });
+        
+        // Drag and drop handling for current period
+        const currentUpload = document.getElementById('currentUpload');
+        
+        currentUpload.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        
+        currentUpload.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+        
+        currentUpload.addEventListener('drop', async function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                if (await validateFile(file)) {
+                    currentFile = file;
+                    readCSV(file, document.getElementById('dataPreview'));
+                    document.getElementById('step1').classList.add('completed');
+                }
+            } else {
+                showError('Please upload a CSV file');
+            }
+        });
+        
+        async function processFiles() {
+            if (!priorFile || !currentFile) {
+                showError('Please upload both prior and current period trial balance files');
+                return;
+            }
+            
+            try {
+                // Update UI
+                document.getElementById('step2').classList.add('active');
+                
+                // Prepare form data
+                const formData = new FormData();
+                formData.append('prior_tb', priorFile);
+                formData.append('current_tb', currentFile);
+                
+                // Send files to backend
+                const response = await fetch(`${API_BASE_URL}/process`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error processing files');
+                }
+                
+                // Update UI with success
+                document.getElementById('step2').classList.add('completed');
+                document.getElementById('step3').classList.add('active', 'completed');
+                
+                // Display stats
+                const stats = data.stats;
+                showSuccess(`
+                    Processing complete!<br>
+                    Total Entries: ${stats.total_entries}<br>
+                    Total Accounts: ${stats.total_accounts}<br>
+                    Total Debit: $${stats.total_debit.toFixed(2)}<br>
+                    Total Credit: $${stats.total_credit.toFixed(2)}
+                `);
+                
+                // Add download link
+                const downloadSection = document.getElementById('downloadSection');
+                downloadSection.innerHTML = `
+                    <div class="download-item">
+                        <span>Journal Entries CSV</span>
+                        <a href="${API_BASE_URL}/download/journal_entries" class="button">Download</a>
+                    </div>
+                `;
+                
+            } catch (error) {
+                showError('Processing error: ' + error.message);
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step3').classList.remove('active', 'completed');
+            }
+        }
+        
+        // AI Assistant Integration
+        function addAIMessage(role, content) {
+            const messages = document.getElementById('aiMessages');
+            const message = document.createElement('div');
+            message.className = `ai-message ${role}`;
+            message.textContent = content;
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        async function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addAIMessage('user', message);
+            input.value = '';
+            
+            // Analyze context and provide relevant response
+            const context = {
+                hasConfig: !!currentFile,
+                currentStep: document.getElementById('step2').classList.contains('completed') ? 3 : 2,
+                hasJournalEntries: false
+            };
+            
+            // Simulate AI response (in production, this would call the Ollama API)
+            setTimeout(() => {
+                let response = '';
+                
+                if (message.toLowerCase().includes('mapping')) {
+                    response = 'For account mapping, I recommend using a consistent pattern. For example, operator account 1000-1000 maps to entity account 10-00. This maintains the account hierarchy while simplifying the structure.';
+                } else if (message.toLowerCase().includes('validation')) {
+                    response = 'I\'m checking your journal entries for validation. The key rule is that total debits must equal total credits. I can also help identify any unmapped accounts or unusual activity patterns.';
+                } else if (message.toLowerCase().includes('activity')) {
+                    response = 'Activity is calculated as: Current TB - Prior TB = Activity. Positive debit activity means the account increased, while positive credit activity means liabilities or revenue increased.';
+                } else {
+                    response = 'I can help with account mappings, validation issues, or explain any part of the ETL process. What specific aspect would you like assistance with?';
+                }
+                
+                addAIMessage('assistant', response);
+            }, 1000);
+        }
+        
+        // Enter key support for AI chat
+        document.getElementById('aiInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendAIMessage();
+            }
+        });
+        
+        // Initialize
+        addAIMessage('assistant', 'Welcome to the Finance ETL Interface! I\'m here to help you process trial balances into journal entries. Upload your prior and current period trial balances to get started.');
+    </script>
+</body>
+</html> 
